@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSB 15-Day Mastery Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --olive: #4a5240;
+    --olive-light: #6b7560;
+    --gold: #c9a84c;
+    --gold-light: #e8c87a;
+    --cream: #f5f0e8;
+    --dark: #1a1c18;
+    --charcoal: #2d3028;
+    --muted: #8a8f80;
+    --accent: #d4522a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--dark);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(74,82,64,0.3) 0%, transparent 60%);
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 8px 20px;
+    border-radius: 2px;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    position: relative;
+    animation: fadeDown 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-badge::before, .hero-badge::after {
+    content: '◆';
+    font-size: 0.5rem;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 14vw, 160px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--cream);
+    position: relative;
+    animation: fadeUp 0.9s 0.2s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--gold);
+    font-size: 0.65em;
+    letter-spacing: 0.15em;
+  }
+
+  .hero-sub {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--muted);
+    margin-top: 24px;
+    max-width: 500px;
+    animation: fadeUp 0.9s 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 50px auto 0;
+    animation: fadeUp 0.9s 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  /* GRID PATTERN */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* CORNER MARKS */
+  .corner { position: absolute; width: 40px; height: 40px; }
+  .corner.tl { top: 30px; left: 30px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .corner.tr { top: 30px; right: 30px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .corner.bl { bottom: 30px; left: 30px; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .corner.br { bottom: 30px; right: 30px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+  /* MAIN CONTENT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  /* PHASE LABEL */
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 80px 0 32px;
+  }
+
+  .phase-label-text {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .phase-label-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(201,168,76,0.5), transparent);
+  }
+
+  /* DAY CARDS */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2px;
+  }
+
+  .day-card {
+    background: var(--charcoal);
+    padding: 32px 28px;
+    position: relative;
+    cursor: default;
+    transition: background 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease forwards;
+    opacity: 0;
+  }
+
+  .day-card:hover {
+    background: #343830;
+    transform: translateY(-2px);
+    z-index: 2;
+  }
+
+  .day-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+
+  .day-card:hover::after { width: 100%; }
+
+  /* Accent color for special days */
+  .day-card.featured { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); }
+  .day-card.featured:hover { background: rgba(201,168,76,0.1); }
+
+  .day-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: rgba(201,168,76,0.2);
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .day-card:hover .day-number { color: rgba(201,168,76,0.35); }
+
+  .day-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .day-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    line-height: 1.3;
+    color: var(--cream);
+    margin-bottom: 18px;
+    padding-right: 60px;
+  }
+
+  .day-topics {
+    list-style: none;
+  }
+
+  .day-topics li {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.55);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.4;
+  }
+
+  .day-topics li:last-child { border-bottom: none; }
+
+  .day-topics li::before {
+    content: '–';
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0px;
+    font-size: 0.8rem;
+  }
+
+  /* WIDE CARD for multi-day */
+  .day-card.wide {
+    grid-column: 1 / -1;
+  }
+
+  .wide-inner {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .wide-left { min-width: 180px; }
+
+  .wide-topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px 32px;
+  }
+
+  .wide-topics-grid li {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* STATS ROW */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .stat-box {
+    background: var(--charcoal);
+    padding: 30px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    text-align: center;
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .footer-note p {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--muted);
+  }
+
+  .footer-note strong {
+    color: var(--gold);
+    font-style: normal;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Stagger cards */
+  .days-grid .day-card:nth-child(1) { animation-delay: 0.05s; }
+  .days-grid .day-card:nth-child(2) { animation-delay: 0.1s; }
+  .days-grid .day-card:nth-child(3) { animation-delay: 0.15s; }
+  .days-grid .day-card:nth-child(4) { animation-delay: 0.2s; }
+  .days-grid .day-card:nth-child(5) { animation-delay: 0.25s; }
+  .days-grid .day-card:nth-child(6) { animation-delay: 0.3s; }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .wide-inner { grid-template-columns: 1fr; gap: 20px; }
+    .day-number { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="hero-badge">Service Selection Board</div>
+  <h1 class="hero-title">
+    <span>15-Day</span>
+    SSB Mastery
+  </h1>
+  <p class="hero-sub">A complete preparation program to shape your officer personality and ace every stage</p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-box"><div class="stat-num">15</div><span class="stat-label">Training Days</span></div>
+    <div class="stat-box"><div class="stat-num">5</div><span class="stat-label">Phases</span></div>
+    <div class="stat-box"><div class="stat-num">15+</div><span class="stat-label">OLQs Covered</span></div>
+    <div class="stat-box"><div class="stat-num">360°</div><span class="stat-label">Assessment Prep</span></div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-label">
+    <span class="phase-label-text">Phase 01 — Foundation</span>
+    <div class="phase-label-line"></div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card featured">
+      <span class="day-number">01</span>
+      <span class="day-tag">Day 1</span>
+      <h3 class="day-title">Foundation & Orientation – Kickstart Your SSB Journey</h3>
+      <ul class="day-topics">
+        <li>SSB selection process and multi-stage assessment overview</li>
+        <li>Officer-Like Qualities (OLQs) and how they are evaluated</li>
+        <li>Personality-based selection: what evaluators look for</li>
+        <li>How SSB assesses leadership, teamwork, and intellect</li>
+        <li>Power of Expression — Verbal & Non-Verbal competency</li>
+        <li>Attitude vs Behaviour and teamwork dynamics</li>
+        <li>Introduction to PP & DT with mentorship practice</li>
+      </ul>
+    </div>
+
+    <div class="day-card">
+      <span class="day-number">02</span>
+      <span class="day-tag">Day 2</span>
+      <h3 class="day-title">Screening Essentials – OIR & PP/DT Mastery</h3>
+      <ul class="day-topics">
+        <li>Art of story-writing from pictures</li>
+        <li>Mastering the discussion phase with hands-on exercises</li>
+        <li>Personalized feedback to sharpen communication skills</li>
+        <li>Officer Intelligence Rating (OIR) Test and its significance</li>
+        <li>Building screening stage confidence through practice</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-label">
+    <span class="phase-label-text">Phase 02 — Psychology</span>
+    <div class="phase-label-line"></div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card">
+      <span class="day-number">03</span>
+      <span class="day-tag">Day 3</span>
+      <h3 class="day-title">Psychology Techniques & PIQ Mastery</h3>
+      <ul class="day-topics">
+        <li>Thematic Apperception Test (TAT) & Confirmatory Series</li>
+        <li>Personal Information Questionnaire (PIQ) — importance & how to fill</li>
+        <li>TAT storytelling techniques to highlight personality</li>
+        <li>TAT practice with detailed mentor feedback</li>
+        <li>Word Association Test (WAT) — strategies & practice</li>
+        <li>Begin shaping your personal Officer Image</li>
+      </ul>
+    </div>
+
+    <div class="day-card">
+      <span class="day-number">04</span>
+      <span class="day-tag">Day 4</span>
+      <h3 class="day-title">Advanced Psychology Testing</h3>
+      <ul class="day-topics">
+        <li>Situation Reaction Test (SRT) & Self-Description Test (SDT)</li>
+        <li>Apply psychology training in practical situations</li>
+        <li>Strengthen decision-making and reaction skills</li>
+        <li>How evaluators assess instincts and responses</li>
+        <li>Master Self-Description (SD) for authentic presentation</li>
+      </ul>
+    </div>
+
+    <div class="day-card featured">
+      <span class="day-number">05</span>
+      <span class="day-tag">Day 5</span>
+      <h3 class="day-title">Integrated Psychological Practice</h3>
+      <ul class="day-topics">
+        <li>Full practice of TAT, WAT, SRT, and SD in a simulated test</li>
+        <li>Personalized mentorship feedback to refine your approach</li>
+        <li>Complete psychological profile review</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-label">
+    <span class="phase-label-text">Phase 03 — Interview Mastery</span>
+    <div class="phase-label-line"></div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card wide">
+      <div class="wide-inner">
+        <div class="wide-left">
+          <span class="day-number" style="position:static; font-size: 5rem; color: rgba(201,168,76,0.25);">6–10</span>
+          <span class="day-tag" style="display:block; margin-top: 8px;">Days 6 to 10</span>
+          <h3 class="day-title" style="padding-right: 0; margin-bottom: 0; margin-top: 8px;">Interview Technique Mastery</h3>
+        </div>
+        <div>
+          <ul class="day-topics wide-topics-grid">
+            <li>Personality mapping through OLQs and interview theory</li>
+            <li>Historical background and organization of the selection system</li>
+            <li>Identifying clues in behaviour and handling probing questions</li>
+            <li>Practice personal interviews with live debriefs</li>
+            <li>Expert tips on building interviewer rapport</li>
+            <li>Psychological testing debriefs with live assessment feedback</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-label">
+    <span class="phase-label-text">Phase 04 — Group Testing</span>
+    <div class="phase-label-line"></div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card">
+      <span class="day-number">11</span>
+      <span class="day-tag">Day 11</span>
+      <h3 class="day-title">Group Discussion & Team Skills</h3>
+      <ul class="day-topics">
+        <li>Introduction to Group Testing concepts</li>
+        <li>Master Group Discussions (GD) structure and strategy</li>
+        <li>Express ideas confidently and clearly in a team environment</li>
+      </ul>
+    </div>
+
+    <div class="day-card">
+      <span class="day-number">12</span>
+      <span class="day-tag">Day 12</span>
+      <h3 class="day-title">Group Planning Exercise (GPE)</h3>
+      <ul class="day-topics">
+        <li>Develop strategic thinking in team tasks</li>
+        <li>Hands-on GPE practice with feedback</li>
+        <li>Enhance leadership and collaboration skills</li>
+        <li>Lecturette practice to improve public speaking</li>
+      </ul>
+    </div>
+
+    <div class="day-card">
+      <span class="day-number">13</span>
+      <span class="day-tag">Day 13</span>
+      <h3 class="day-title">Progressive Group Tasks (PGT)</h3>
+      <ul class="day-topics">
+        <li>Outdoor exercises to enhance teamwork and planning</li>
+        <li>Real-time problem-solving under mentorship</li>
+        <li>Build confidence in practical group challenges</li>
+      </ul>
+    </div>
+
+    <div class="day-card">
+      <span class="day-number">14</span>
+      <span class="day-tag">Day 14</span>
+      <h3 class="day-title">Command & Half-Group Tasks</h3>
+      <ul class="day-topics">
+        <li>Practice Half-Group Task (HGT) and Command Task (CT)</li>
+        <li>Mentored feedback on psychological dossier</li>
+        <li>Sharpen decision-making under pressure</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-label">
+    <span class="phase-label-text">Phase 05 — Final Assessment</span>
+    <div class="phase-label-line"></div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card featured wide">
+      <span class="day-number" style="font-size: 5rem;">15</span>
+      <span class="day-tag">Day 15 — Grand Finale</span>
+      <h3 class="day-title" style="font-size: 1.3rem;">Obstacles, Lecturettes & Final Feedback</h3>
+      <ul class="day-topics wide-topics-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 4px 32px;">
+        <li>Tackle Group and Individual Obstacles</li>
+        <li>Participate in Final Group Task and conference simulation</li>
+        <li>Final GD & Lecturette practice</li>
+        <li>One-on-one feedback sessions with mentors</li>
+        <li>Identify strengths and areas to polish before your SSB</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-note">
+    <p><strong>15 Days.</strong> One mission — earn your commission.</p>
+    <p style="margin-top: 12px; font-size: 0.78rem; letter-spacing: 0.1em; font-family: 'DM Sans', sans-serif; font-style: normal;">Train hard. Think sharp. Lead with character.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
